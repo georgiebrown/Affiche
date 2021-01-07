@@ -9110,7 +9110,7 @@ theme.ProductRecommendations = (function() {
       baseUrl +
       '?section_id=product-recommendations&product_id=' +
       productId +
-      '&limit=2';
+      '&limit=12';
 
     window.performance.mark(
       'debut:product:fetch_product_recommendations.start'

@@ -7,9 +7,9 @@
             <h2>{{ section.settings.heading | escape }}</h2>
           </div>
         {%- endif -%}
-        <ul class="grid grid--uniform grid--view-items">
+        <ul class="recommendations-container grid grid--uniform grid--view-items">
           {%- for product in recommendations.products -%}
-            <li class="grid__item small--one-half medium-up--one-half">
+            <li class="product-rec grid__item small--one-half medium-up--one-half">
               {% include 'product-card-grid-without-variant-picker', max_height: 500, product: product, show_vendor: section.settings.show_vendor %}
             </li>
           {%- endfor -%}
