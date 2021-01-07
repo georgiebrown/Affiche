@@ -1,0 +1,31 @@
+<div id="product-top" class="wrapper custom-grid">
+     <div class="product-images js-product-slideshow">
+        <div class="slides js-slides">
+             {% for image in product.images %}
+              {% capture product_image_size %}{{ height }}x{% endcapture %}
+                <div class="single-image">
+                  <img src="{{ image.src | img_url: '600x' }}" alt="{{ image.alt | escape }}" >
+               </div>
+             {% endfor %}
+        </div>
+        {% comment %}{% if product.images.size > 1%}
+          <button class="slider-button next js-slider-button-next">
+            {% include 'icon-arrow-right', alt: 'Previous' %}
+          </button>
+        {% endif %}
+        {% endcomment %}
+     </div>
+
+     <div class="bg-color-yellow product-description product-actions">
+        <div class="product-single__meta">
+
+            <p class="product-single__title">{{ product.title }}</p>
+            <script>window.performance.mark('debut:product:title_visible');</script>
+            <p class="orange-text">{{ product.vendor }}</p>
+
+            <div class="product-single__description rte">
+              {{ product.description }}
+            </div>
+         </div>
+     </div>
+</div>

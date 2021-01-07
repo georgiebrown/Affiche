@@ -1,0 +1,14 @@
+<div class="product-option-row">
+	<div class="option-values">
+		{% for value in option.values %}
+			<span class="{{ value }}-dot"></span>
+			{% assign radio_id = 'option-' | append: option_name | append: '-' | append: value | handleize %}
+				<input class="colour-button" id="{{ radio_id }}" type="radio" name="{{ option_name }}" value="{{ value }}">
+				{% if force_colors == true %}
+					{% include 'color-swatch' with color: value %}
+				{% else %}
+					{{ value }}
+				{% endif %}
+			{% endfor %}
+	</div>
+</div>

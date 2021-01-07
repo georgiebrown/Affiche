@@ -1,0 +1,75 @@
+{% for block in section.blocks %}
+       
+
+<div class="blog-image-blocks two-columns custom-grid blog-block">
+  <div>
+    {% if block.settings.image-one != blank %}
+   <img src="{{block.settings.image-one | img_url: '500x'}}">
+   {% endif%}
+  </div>
+  <div>
+    {% if block.settings.image-two != blank %}
+    <img src="{{block.settings.image-two | img_url: '500x'}}">
+    {% endif%}
+  </div>
+</div>
+
+<div class="full-image blog-block">
+  {% if block.settings.large-image != blank %}
+  <img src="{{block.settings.large-image | img_url: '1000x' }}">
+  {% endif%}  
+</div>
+
+<div class="text-block blog-block">
+  {% if block.settings.text-block != blank %}
+  <p>{{ block.settings.text-block }}</p>
+  {%endif%}
+  
+</div>
+{% endfor %}
+
+{% schema %}
+  {
+    "name": "Article Content",
+    "class": "article-page-section",
+    "blocks": [
+      {
+      "type": "image_block",
+      "name": "Image Blocks",
+      "settings": [
+        {
+        "id": "image-one",
+        "type": "image_picker",
+        "label": "First Image"
+        },
+        {
+        "id": "image-two",
+        "type": "image_picker",
+        "label": "Second Image"
+        }
+      ]
+      },
+      {
+         "type": "full-image",
+          "name": "Large Image",
+          "settings": [
+            {
+            "id": "large-image",
+            "type": "image_picker",
+            "label": "Image"
+        }]},
+            {
+         "type": "text",
+          "name": "Text block",
+          "settings": [
+            {
+              "id": "text-block",
+              "type": "textarea",
+              "label": "Text block"
+                  }
+            ]
+          }
+   ]
+  }
+
+{% endschema %}

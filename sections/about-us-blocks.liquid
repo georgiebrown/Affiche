@@ -1,0 +1,138 @@
+{% schema %}
+
+ {
+ 	"name": "about-content",
+ 	"class": "about-blocks",
+ 	"blocks": [
+ 		{
+ 		"type": "image_text",
+ 		"name": "Image &amp; Text",
+ 		"settings": [
+ 			{
+ 				"id": "image",
+ 				"type": "image_picker",
+ 				"label": "Image"
+ 			},
+ 			{
+ 				"id": "sub_title",
+ 				"type": "text",
+ 				"label": "Sub Title"
+ 			},
+ 			{
+ 				"id": "title",
+ 				"type": "text",
+ 				"label": "Title"
+ 			},
+ 			{
+ 				"id": "content",
+ 				"type": "textarea",
+ 				"label": "content"
+ 			},
+ 			{
+ 				"id": "button_url",
+ 				"type": "url",
+ 				"label": "Button URL"
+ 			},
+ 			{
+ 				"id": "button_text",
+ 				"type": "text",
+ 				"label": "Button Text"
+ 			},
+ 			{
+ 				"id": "direction",
+ 				"type": "select",
+ 				"label": "Direction",
+ 				"options":[
+ 					{
+ 						"value": "rtl",
+ 						"label": "Image to Text"
+ 					},
+ 					{
+ 						"value": "ltr",
+ 						"label": "Text to Image"
+ 					}
+ 				]
+ 			},
+ 			{
+ 				"id": "bgcolor",
+ 				"type": "select",
+ 				"label": "Background Color",
+ 				"options":[
+ 					{
+ 						"value": "yellow",
+ 						"label": "Yellow"
+ 					},
+ 					{
+ 						"value": "blue",
+ 						"label": "Blue"
+ 					},
+ 					{
+ 						"value": "orange",
+ 						"label": "Orange"
+ 					}
+ 				]
+ 			} 
+ 		]
+
+ 		}
+
+ 	]
+ }
+{% endschema %}
+
+<div class="content-wrap">
+	{% for block in section.blocks %}
+		<div class="content-block-{{ block.type }} custom-grid " {{ block.shopify_attributes }}>
+		
+			<div class="image-text direction-{{ block.settings.direction }} bg-color-{{ block.settings.bgcolor }}">
+		
+				{% if block.settings.image != blank %}
+					<div class="block-image">
+						<img src="{{ block.settings.image | img_url: '1280x' }}" alt="">
+					</div>
+				{% endif %}
+
+			<div class="block-content">
+				<div class="block-content-inner valign-center">
+					<p>{{ block.settings.sub_title }}</p>
+					<h1> {{ block.settings.title }}</h1>
+					<p> {{ block.settings.content }}</p>
+					<a href="{{ block.settings.button_url }}">{{ block.settings.button_text}}</a>
+				</div>
+			</div>
+				 
+		</div>
+
+		</div>
+	{% endfor %}
+	
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

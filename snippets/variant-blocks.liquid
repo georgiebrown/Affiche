@@ -1,0 +1,191 @@
+ <h3 class="orange-text valign-center">Customise your artwork</h3>
+
+  <div class="variant-blocks">
+          {% form 'product', product, class:form_classes, novalidate: 'novalidate', data-product-form: '' %}
+            {% unless product.has_only_default_variant %}
+              <div class="product-form__controls-group custom-grid two-columns">
+                
+                {% for option in product.options_with_values %}
+
+                    {% if option.name == 'Size' %} 
+                        <div class="product-image">
+                                <img src="{{ product.images.last | img_url: 'large' }}" alt="{{ image.alt | escape }}">                
+                        </div>
+                        <div class="product-content bg-color-orange valign-center">
+                        
+                          <p>{{ option.name }}</p>
+                          <h2>Chose your size</h2>
+
+                          <select class="size-select single-option-selector single-option-selector-{{ section.id }} product-form__input"
+                            id="SingleOptionSelector-{{ forloop.index0 }}"
+                            data-index="option{{ forloop.index }}">
+                            {% for value in option.values %}
+                              <option value="{{ value | escape }}"{% if option.selected_value == value %} selected="selected"{% endif %}>{{ value }}</option>
+                            {% endfor %}
+                          </select>
+                        </div>       
+                    {% endif%}
+                
+                    {% if option.name == 'Frame' %} 
+                        <div class="product-image">
+                          <div class="js-variant-slideshow">
+                            <div class="variant-images slides js-slides">
+                            {% for image in product.images %}
+                              <div class="variant-image single-image {% if forloop.index > 0 %}{{ image.variants.first.title }}{% endif %}" {% if image.attached_to_variant? %} data-variant="{{ image.variants.first.id }}" {% endif  %} id=" {% if forloop.index > 0 %}{{ image.variants.first.title }}{% endif %}">
+                                <img src="{{ image.src | img_url: 'large' }}" alt="{{ image.alt | escape }}">
+                              </div>
+                            {% endfor %}
+                           </div>
+                          </div>
+                        </div>
+                        <div class="product-content bg-color-blue valign-center">
+                        
+                          <p>{{ option.name }}</p>
+                          <h2>Chose your frame</h2>
+                        <div class="filter-group">
+                          <select class="frame-select single-option-selector single-option-selector-{{ section.id }} product-form__input"
+                            id="SingleOptionSelector-{{ forloop.index0 }}"
+                            data-index="option{{ forloop.index }}">
+                            {% for value in option.values %}
+                              <option class="{{ value }}" value="{{ value }}"{% if option.selected_value == value %} selected="selected"{% endif %}>{{ value }}</option>
+                            {% endfor %}
+                          </select>
+                        </div>
+                        </div>       
+                    {% endif%}
+                  
+                    {% comment %}
+                    {% for variant in product.variants %}
+                    <img src="{{ variant.featured_media }}" alt="">
+                      {{ variant.featured_media }}
+                    {% endfor %}
+                    {% endcomment %}
+
+                {% endfor %}
+              </div>
+            {% endunless %}
+
+            <div class="order-summary valign-center bg-color-yellow">
+              <h2>Order Summary</h2>
+              <p>Size: <span class="underline" id="size"></span></p>
+              <p>Frame material: <span class="underline" id="material"></span></p>
+              <div class="order-summary-price">
+                  <div class="product__price order-summary-price">
+                      {% include 'product-price', variant: current_variant %}
+                 </div>
+              </div>    
+             <div class="filter-group">
+            <select name="id" id="ProductSelect-{{ section.id }}" class="product-form__variants no-js">
+              {% for variant in product.variants %}
+                <option value="{{ variant.id }}"
+                  {%- if variant == current_variant %} selected="selected" {%- endif -%}
+                >
+                  {{ variant.title }}  {%- if variant.available == false %} - {{ 'products.product.sold_out' | t }}{% endif %}
+                </option>
+              {% endfor %}
+              </div>
+            </select>
+          </div>
+
+            {% if section.settings.show_quantity_selector %}
+              <div class="product-form__controls-group">
+                <div class="product-form__item">
+                  <label for="Quantity-{{ section.id }}">{{ 'products.product.quantity' | t }}</label>
+                  <input type="number" id="Quantity-{{ section.id }}"
+                    name="quantity" value="1" min="1" pattern="[0-9]*"
+                    class="product-form__input product-form__input--quantity" data-quantity-input
+                  >
+                </div>
+              </div>
+            {% endif %}
+
+
+            <div class="product-form__error-message-wrapper product-form__error-message-wrapper--hidden{% if section.settings.enable_payment_button %} product-form__error-message-wrapper--has-payment-button{% endif %}"
+              data-error-message-wrapper
+              role="alert"
+            >
+              <span class="visually-hidden">{{ 'general.accessibility.error' | t }} </span>
+              {% include 'icon-error' %}
+              <span class="product-form__error-message" data-error-message>{{ 'products.product.quantity_minimum_message' | t }}</span>
+            </div>
+
+            <div class="product-form__controls-group product-form__controls-group--submit">
+              <div class="product-form__item product-form__item--submit
+                {%- if section.settings.enable_payment_button %} product-form__item--payment-button {%- endif -%}
+                {%- if product.has_only_default_variant %} product-form__item--no-variants {%- endif -%}"
+              >
+                <button type="submit" name="add"
+                  {% unless current_variant.available %} aria-disabled="true"{% endunless %}
+                  aria-label="{% unless current_variant.available %}{{ 'products.product.sold_out' | t }}{% else %}{{ 'products.product.add_to_cart' | t }}{% endunless %}"
+                  class="btn product-form__cart-submit{% if section.settings.enable_payment_button and product.selling_plan_groups == empty %} btn--secondary-accent{% endif %}"
+                  {% if settings.enable_ajax %}aria-haspopup="dialog"{% endif %}
+                  data-add-to-cart>
+                  <span data-add-to-cart-text>
+                    {% unless current_variant.available %}
+                      {{ 'products.product.sold_out' | t }}
+                    {% else %}
+                      {{ 'products.product.add_to_cart' | t }}
+                    {% endunless %}
+                  </span>
+                  <span class="hide" data-loader>
+                    {% include 'icon-spinner' %}
+                  </span>
+                </button>
+                {% if section.settings.enable_payment_button %}
+                  {{ form | payment_button }}
+                {% endif %}
+              </div>
+            </div>
+          {% endform %}
+            </div>
+        </div>
+    </div>
+
+
+<script>
+
+
+(function() {
+
+   // your page initialization code here
+   // the DOM will be available here
+var variantImages =  document.querySelector('.variant-images');
+var variantImage = document.querySelectorAll('.variant-image');
+  
+var sizeSelect = document.querySelector('.size-select');
+var sizeSelectValue = sizeSelect.value;
+
+
+var frameSelect = document.querySelector('.frame-select');
+var frameSelectValue = frameSelect.value;
+
+var selectedSizeSummary = document.querySelector('#size');
+var selectedFrameSummary = document.querySelector('#material');
+
+selectedSizeSummary.innerHTML = sizeSelectValue;
+selectedFrameSummary.innerHTML = frameSelectValue;
+
+
+sizeSelect.addEventListener('change', (event) => {
+  var selectedSizeSummary = document.querySelector('#size');
+  var sizeSelectValue = sizeSelect.value;
+  selectedSizeSummary.innerHTML = sizeSelectValue;
+});
+
+frameSelect.addEventListener('change', (event) => {
+  var selectedFrameSummary = document.querySelector('#material');
+  var frameSelectValue = frameSelect.value;
+  selectedFrameSummary.innerHTML = frameSelectValue;
+  variantImage.forEach(image => image.style.display="none");
+
+
+  var selectedValueImage = variantImages.getElementsByClassName(frameSelectValue)
+  var selectedValueImageItem = (selectedValueImage[0]);
+  selectedValueImageItem.style.display = "block";
+});
+
+})();
+
+
+  
+</script>

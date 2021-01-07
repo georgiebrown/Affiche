@@ -1,0 +1,16 @@
+{% schema %}
+  {
+    "name": "About Image",
+    "settings": [
+    	{
+    		"id": "about-image",
+    		"type": "image_picker",
+    		"label": "about"
+    	}
+    ]
+  }
+{% endschema %}
+
+
+
+<img src="{{ section.settings.about-image | img_url: "600x" }}">
